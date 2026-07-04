@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<!--<script>
+window.onerror = function(message, source, lineno, colno, error) {
+    alert("เจอจุดพังแล้วตี๋!\nบรรทัดที่: " + lineno + "\nสาเหตุ: " + message);
+    return true;
+};
+</script>-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Malee Online</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="sticky-top-section">
+    <img src="https://i.ibb.co/5hJLbbr5/pngtree-cartoon-child-girl-wearing-a-dragon-hat-costume-and-holding-zongzi-png-image-16743845-1.webp" class="cart-mascot"> 
+<div id="cart-summary-store1" onclick="openCartPage()">
+
+    
+    <div id="cart-count-store1" style="font-size: 12px; font-weight: bold;">🛒 0 ชิ้น</div>
+    <div id="cart-total-price-store1" style="font-size: 11px;">฿0</div>
+</div>
+
+    <header id="main-header-store1">
+        <div class="header-container">
+            <div class="user-avatar-section">
+                <div class="avatar-box" onclick="document.getElementById('profile-upload-store1').click();" style="cursor: pointer;">
+                    <div class="avatar-icon" id="header-avatar-img-store1">👤</div>
+                    <p id="header-user-name-store1">ชื่อเล่น</p>
+                </div>
+                <div class="divider-line"></div>
+                <input type="file" id="profile-upload-store1" accept="image/*" style="display: none;" onchange="previewProfileImage(this)">
+            </div>
+            
+            <div class="title-group">
+                <h1 class="main-title">MaLee Online</h1>
+                <p class="welcome-subtext">ยินดีต้อนรับจ้า</p>
+            </div>
+            <div style="width: 15px;"></div>
+        </div>
+    </header>
+    
+<div class="search-section">
+    <input type="text" id="searchInput" placeholder="🔍 พิมพ์ชื่อสินค้าที่ต้องการ..." oninput="searchProducts()">
+</div>
+<div id="search-results-container"></div>
+
+    <div style="text-align: center; margin: 25px 0 20px;">
+        <h2 style="font-size: 18px; color: #1e3a8a;">เมนูเลือกชนิดสินค้า</h2>
+    </div>
+
+</div> <div id="main-page-store1">
+    <div style="display: flex; flex-direction: column; gap: 12px; padding: 0 30px;">
+<div class="category-card" onclick="openCategory('ของใช้ไหว้เช็งเม้ง')"><span>🧧</span><h3>ของใช้ไหว้เช็งเม้ง</h3></div>
+<div class="category-card" onclick="openCategory('ยาสมุนไพรปรุงอาหาร')"><span>🌿</span><h3>ยาสมุนไพรปรุงอาหาร</h3></div>
+<div class="category-card" onclick="openCategory('มีด จอบ เคียว')"><span>🗡️</span><h3>มีด จอบ เคียว</h3></div>
+<div class="category-card" onclick="openCategory('ของใช้อื่น ๆ')"><span>📦</span><h3>รวมของใช้อื่น ๆ</h3></div>
+<div class="category-card" onclick="openCategory('เมนูชนิดสินค้า 5')"><span>📦</span><h3>เมนูชนิดสินค้า 5</h3></div>
+<div class="category-card" onclick="openCategory('เมนูชนิดสินค้า 6')"><span>📦</span><h3>เมนูชนิดสินค้า 6</h3></div>
+<div class="category-card" onclick="openCategory('เมนูชนิดสินค้า 7')"><span>📦</span><h3>เมนูชนิดสินค้า 7</h3></div>
+<div class="category-card" onclick="openCategory('เมนูชนิดสินค้า 8')"><span>📦</span><h3>เมนูชนิดสินค้า 8</h3></div>
+    </div>
+</div>
+
+<div id="sub-category-page-store1" style="display: none; padding: 20px 15px;">
+    <h2 id="sub-category-title" style="text-align: center; color: #1e3a8a; margin-bottom: 20px;">ชื่อหมวดหมู่</h2>
+    <div id="product-list-container" style="display: flex; flex-direction: column; gap: 15px;">
+    </div>
+</div>
+<div id="cart-page-store1" style="display: none; padding: 20px;">
+    
+    <div id="empty-cart-msg-store1" style="text-align: center; margin-top: 50px;">
+        <div style="font-size: 50px; margin-bottom: 15px;">🛒</div>
+        <h3 style="color: #6b7280; font-size: 16px; font-weight: normal;">( สถานะตะกร้า / ยังไม่มีบิลหรือสินค้าในตะกร้า )</h3>
+    </div>
+    
+    <div id="new-cart-container-store1">
+        <div style="background: white; border-radius: 20px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+            <h2 id="new-cart-title-store1" style="text-align: center; color: #1e3a8a; margin-bottom: 15px; border-bottom: 2px dashed #eee; padding-bottom: 10px;">🧾 บิลรวมสินค้า</h2>
+            
+            <div id="cart-items-list-store1" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;"></div>
+            
+            <div style="border-top: 2px solid #eee; padding-top: 15px;">
+                <p style="display: flex; justify-content: space-between; font-weight: bold; font-size: 20px; color: #333;">
+                    <span>รวมทั้งสิ้น:</span>
+                    <span id="final-total-price-store1" style="color: #ff4b2b;">฿0</span>
+                </p>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button onclick="clearCart()" style="flex: 1; background: #dc3545; color: white; padding: 12px; border-radius: 10px; border: none; font-weight: bold; font-family: 'Kanit', sans-serif; cursor: pointer;">ลบบิลทิ้ง</button>
+                <button onclick="confirmOrder()" style="flex: 2; background: #1e3a8a; color: white; padding: 12px; border-radius: 10px; border: none; font-weight: bold; font-family: 'Kanit', sans-serif; font-size: 16px; cursor: pointer;">ยืนยันคำสั่งซื้อ</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="product-selector-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: center;">
+    <div style="background: white; padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; text-align: center;">
+        <div id="modal-product-icon" style="font-size: 70px; margin-bottom: 5px;">📦</div>
+        
+        <h3 id="modal-product-name" style="margin-bottom: 5px; font-size: 20px;">ชื่อสินค้า</h3>
+        <p style="color: #666; margin-bottom: 15px; font-size: 15px;">ราคา: ฿<span id="modal-product-price">0</span></p>
+        
+        <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 15px;">
+            <button onclick="updateModalQty(-1)" style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ddd; background: #f9f9f9; font-size: 20px;">-</button>
+            <span id="modal-qty-display" style="font-size: 20px; font-weight: bold;">1</span>
+            <button onclick="updateModalQty(1)" style="width: 40px; height: 40px; border-radius: 50%; border: none; background: #1e3a8b; color: white; font-size: 20px;">+</button>
+        </div>
+        
+        <div style="margin-bottom: 20px; font-size: 18px; font-weight: bold; color: #ff4b2b;">
+            ราคารวม: ฿<span id="modal-total-price">0</span>
+        </div>
+        
+        <button onclick="confirmAddToCart()" style="width: 100%; padding: 12px; background: #ff4b2b; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 16px;">เพิ่มลงตะกร้า</button>
+        <button onclick="closeProductModal()" style="width: 100%; padding: 10px; background: transparent; color: #666; border: none; margin-top: 5px;">ยกเลิก</button>
+    </div>
+</div>
+
+<!-- ================================== -->
+<!-- [เริ่ม] หน้าโปรไฟล์ย่อย -->
+<!-- ================================== -->
+<div id="profile-page-store1" style="display: none; ">
+    
+    <div class="profile-header-bg">
+        
+        <div class="profile-info-box">
+            <span id="profile-sub-nickname" style="color: #fde047; font-weight: bold; font-size: 14px;">ส้มโอ</span>
+        </div>
+
+        <div class="profile-info-box">
+            <span id="profile-sub-id" style="color: #fde047; font-weight: bold; font-size: 14px;">ID : ML5757</span>
+        </div>
+
+        <div class="profile-avatar-wrapper">
+            <img id="profile-page-avatar" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+            <span id="profile-page-placeholder" style="color: #eab308; font-weight: bold; font-size: 16px; text-align: center; line-height: 1.2;">รูป<br>โปรไฟล์</span>
+        </div>
+    </div>
+
+    <div style="margin-top: 65px; display: flex; flex-direction: column; align-items: center; gap: 15px;">
+        <div id="profile-sub-phone" class="profile-detail-box" style="color: #333;">
+            092-4522-045
+        </div>
+        <div id="merchant-code-toggle" onclick="toggleMerchantCode()" class="profile-detail-box" style="color: red;">
+            ******
+        </div>
+          <div class="profile-detail-box" style="color: #333; cursor: pointer;" onclick="openEditProfileModal()">
+            แก้ไขข้อมูล
+        </div>
+    </div>
+
+    <div class="profile-history-card">
+        <div class="profile-history-title">
+            ประวัติการสั่งซื้อ
+        </div>
+        <div style="padding: 20px; text-align: center; color: #9ca3af; margin-top: 20px; font-size: 14px;">
+            (ยังไม่มีประวัติการสั่งซื้อ)
+        </div>
+    </div>
+
+</div>
+<!-- ================================== -->
+<!-- [จบ] หน้าโปรไฟล์ย่อย -->
+<!-- ================================== -->
+
+<div id="bottom-nav-store1" class="bottom-nav-bar">
+    <div class="nav-item active" onclick="goHome()">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-text">หน้าหลัก</span>
+    </div>
+    
+<div class="nav-item" onclick="window.open('https://line.me/R/oaMessage/@160pwewf/?ติดต่อสอบถามสินค้าในร้านจ้า', '_blank')">
+        <span class="nav-icon">💬</span>
+        <span class="nav-text">แชท</span>
+    </div>
+    
+    <div class="nav-item" onclick="openProfile()">
+        <span class="nav-icon">👤</span>
+        <span class="nav-text">โปรไฟล์</span>
+    </div>
+</div>
+
+
+<div id="product-modal-store1" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 20000; justify-content: center; align-items: center;">
+    <div style="background: white; width: 90%; max-width: 350px; border-radius: 20px; padding: 20px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+        <div id="modal-img-store1" style="width: 100%; height: 250px; background: #f8f9fa; font-size: 80px; margin-bottom: 15px;">📦</div>
+        <h3 id="modal-name-store1" style="font-size: 20px; color: #1e3a8b; margin-bottom: 5px;">ชื่อสินค้า</h3>
+        <p id="modal-price-unit-store1" style="color: #ff4b2b; font-size: 15pxpx; margin-bottom: 10px;">฿0 / ชิ้น</p>
+        
+        <div style="display: flex; justify-content: center; align-items: center; gap: 25px; margin-bottom: 20px;">
+            <button onclick="changeQty(-1)" style="width: 45px; background-color: #f3f4f6; border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 24px; font-weight: bold; cursor: pointer;">-</button>
+            <span id="modal-qty-store1" style="font-size: 26px; font-weight: bold;">1</span>
+            <button onclick="changeQty(1)" style="background: #e0f2fe; color: #0284c7; border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 20px; font-weight: bold; cursor: pointer;">+</button>
+        </div>
+        
+        <div style="display: flex; gap: 10px;">
+            <button onclick="closeModal()" style="width: 30%; padding: 15px; border-radius: 12px; border: none; background: #ddd; color: #4b5563; font-weight: bold; font-size: 16px; cursor: pointer;">ยกเลิก</button>
+            <button onclick="confirmSelection()" id="modal-confirm-btn" style="width: 70%; padding: 15px; border-radius: 12px; border: none; background: #1e3a8a; color: white; font-weight: bold; font-size: 16px; cursor: pointer;">ตกลง (รวม ฿0)</button>
+        </div>
+    </div>
+</div>
+ 
+            <div id="crop-modal-store1" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 200000; justify-content: center; align-items: center; flex-direction: column;">
+  
+<!-- [H1.Pun110]-->
+    <div id="crop-modal-content-store1" style="background: #111; width: 90%; max-width: 400px; padding: 20px; border-radius: 25px; text-align: center; border: 1px solid #333;">
+            <h3 id="crop-modal-title-store1" style="color: white; margin-top: 0; font-size: 16px;">📐 ปรับรูปให้เข้าวงกลม</h3>
+<!-- [H1.Pun111]-->
+            <div id="crop-wrapper-store1" style="width: 250px; height: 250px; margin: 20px auto; position: relative; overflow: hidden; border-radius: 50%; border: 3px solid #1e3a8a; background: #222;">
+<!-- [H1.Pun112]-->
+            <img id="crop-preview-img-store1" src="" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1); transform-origin: center center; max-width: 100%; max-height: 100%; user-select: none; touch-action: none;">
+        </div>
+<!-- [H1.Pun113]-->
+           <input type="range" id="crop-zoom-store1" min="1" max="3" step="0.01" value="1" style="width: 80%; margin: 20px 0;">
+<!-- [H1.Pun114]-->
+            <div id="crop-action-buttons-store1" style="display: flex; gap: 10px;">
+<!-- [H1.Pun115]-->
+            <button id="btn-cancel-crop-store1" onclick="closeCropModal()" style="flex: 1; padding: 12px; border-radius: 15px; background: #333; color: #fff; border: none;">ยกเลิก</button>
+<!-- [H1.Pun116]-->
+            <button id="btn-confirm-crop-store1" onclick="saveCroppedImage()" style="flex: 1; padding: 12px; border-radius: 15px; background: #28a745; color: white; border: none; font-weight: bold;">ตกลง</button>
+        </div>
+    </div>
+</div>
+<div id="big-profile-modal-store1" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; justify-content: center; align-items: center; flex-direction: column;">
+    <div style="width: 80%; max-width: 320px; text-align: center;">
+        <img id="big-profile-image-store1" src="" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 15px; border: 3px solid #1e3a8b; background: #222; margin-bottom: 20px;">
+        <div style="display: flex; gap: 10px;">
+            <button onclick="closeBigProfileModal()" style="flex: 1; padding: 12px; border-radius: 12px; border: none; background: #f3f4f6; color: #4b5563; font-weight: bold; font-size: 16px; cursor: pointer;">ปิด</button>
+            <button onclick="document.getElementById('profile-upload-store1').click();" style="flex: 2; padding: 12px; border-radius: 12px; border: none; background: #1e3a8b; color: white; font-weight: bold; font-size: 16px; cursor: pointer;">🔄 เปลี่ยนรูปใหม่</button>
+        </div>
+    </div>
+<!-- ป๊อปอัปข้อมูลเข้าระบบครั้งแรกและไอดีรหัสสมาชิก -->
+</div>  <div id="welcome-modal-store1" class="welcome-modal-overlay">
+    <div class="welcome-modal-box">
+        <h3 style="margin-bottom: 15px; color: #1e3a8b;">ยินดีต้อนรับ</h3>
+        
+        <input type="text" id="reg-nickname" placeholder="ชื่อเล่น" class="welcome-input">
+        <input type="tel" id="reg-phone" placeholder="เบอร์โทรศัพท์" class="welcome-input">
+        
+        <div class="policy-container">
+            <input type="checkbox" id="reg-policy" class="policy-checkbox">
+            <label for="reg-policy" class="policy-text">
+                ข้าพเจ้ายอมรับนโยบายความเป็นส่วนตัว และยินยอมให้ระบบบันทึกข้อมูลเพื่อสร้างรหัสสมาชิกอัตโนมัติ
+            </label>
+        </div>
+        
+        <button onclick="submitWelcomeData()" class="btn-welcome-submit">ยืนยันข้อมูล</button>
+    </div>
+<!-- ป๊อปอัปจ้อมูลเข้าระบบครั้งแรกจบตรงนี้ -->
+</div>
+<!-- ป๊อปอัปแก้ไขข้อมูลโปรไฟล์ -->
+<div id="edit-profile-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000;">
+    <div style="background: white; padding: 20px; border-radius: 10px; width: 90%; max-width: 400px; text-align: center;">
+        <h3 style="margin-top: 0;">แก้ไขข้อมูลส่วนตัว</h3>
+        
+        <div style="margin-bottom: 15px; text-align: left;">
+            <label style="font-weight: bold;">รหัสสมาชิก (ห้ามแก้ไข):</label>
+            <p id="edit-show-id" style="margin: 5px 0; color: gray; font-size: 1.1em;"></p>
+        </div>
+
+        <div style="margin-bottom: 15px; text-align: left;">
+            <label style="font-weight: bold;">ชื่อเล่น:</label>
+            <input type="text" id="edit-nickname" style="width: 100%; padding: 10px; margin-top: 5px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px;">
+        </div>
+        
+        <div style="margin-bottom: 20px; text-align: left;">
+            <label style="font-weight: bold;">เบอร์โทรศัพท์:</label>
+            <input type="tel" id="edit-phone" style="width: 100%; padding: 10px; margin-top: 5px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px;">
+        </div>
+        
+<div>
+            <button onclick="closeEditModal()" style="background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-size: 1em; cursor: pointer;">ยกเลิก</button>
+            <button onclick="saveEditedProfile()" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-size: 1em; cursor: pointer; margin-right: 10px;">บันทึก</button>
+        </div>
+    </div>
+</div> 
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+
+<script src="app.js"></script>
+
+</body>
+</html>
