@@ -57,7 +57,7 @@ window.onerror = function(message, source, lineno, colno, error) {
 <div class="category-card" onclick="openCategory('ของใช้ไหว้เช็งเม้ง')"><span>🧧</span><h3>ของใช้ไหว้เช็งเม้ง</h3></div>
 <div class="category-card" onclick="openCategory('ยาสมุนไพรปรุงอาหาร')"><span>🌿</span><h3>ยาสมุนไพรปรุงอาหาร</h3></div>
 <div class="category-card" onclick="openCategory('มีด จอบ เคียว')"><span>🗡️</span><h3>มีด จอบ เคียว</h3></div>
-<div class="category-card" onclick="openCategory('ของใช้อื่น ๆ')"><span>📦</span><h3>รวมของใช้อื่น ๆ</h3></div>
+<div class="category-card" onclick="openCategory('รวมของใช้อื่น ๆ')"><span>📦</span><h3>รวมของใช้อื่น ๆ</h3></div>
 <div class="category-card" onclick="openCategory('เมนูชนิดสินค้า 5')"><span>📦</span><h3>เมนูชนิดสินค้า 5</h3></div>
 <div class="category-card" onclick="openCategory('เมนูชนิดสินค้า 6')"><span>📦</span><h3>เมนูชนิดสินค้า 6</h3></div>
 <div class="category-card" onclick="openCategory('เมนูชนิดสินค้า 7')"><span>📦</span><h3>เมนูชนิดสินค้า 7</h3></div>
@@ -152,14 +152,18 @@ window.onerror = function(message, source, lineno, colno, error) {
         </div>
     </div>
 
-    <div class="profile-history-card">
+        <div class="profile-history-card">
         <div class="profile-history-title">
             ประวัติการสั่งซื้อ
         </div>
-        <div style="padding: 20px; text-align: center; color: #9ca3af; margin-top: 20px; font-size: 14px;">
-            (ยังไม่มีประวัติการสั่งซื้อ)
+        
+        <div id="member-order-history-container">
+            <div style="padding: 20px; text-align: center; color: #9ca3af; margin-top: 20px; font-size: 14px;">
+                กำลังโหลดประวัติการสั่งซื้อ... ⏳
+            </div>
         </div>
     </div>
+
 
 </div>
 <!-- ================================== -->
@@ -249,7 +253,7 @@ window.onerror = function(message, source, lineno, colno, error) {
         
         <button onclick="submitWelcomeData()" class="btn-welcome-submit">ยืนยันข้อมูล</button>
     </div>
-<!-- ป๊อปอัปจ้อมูลเข้าระบบครั้งแรกจบตรงนี้ -->
+<!-- ป๊อปอัปข้อมูลเข้าระบบครั้งแรกจบตรงนี้ -->
 </div>
 <!-- ป๊อปอัปแก้ไขข้อมูลโปรไฟล์ -->
 <div id="edit-profile-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000;">
