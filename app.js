@@ -181,36 +181,40 @@ input.style.cssText = "width:100%; padding:12px; margin-bottom:20px; border:1px 
         document.body.removeChild(overlay);
     };
 
-    btnConfirm.onclick = async () => {
+btnConfirm.onclick = async () => {
         let enteredPin = input.value.trim();
         document.body.removeChild(overlay); 
         
         if (!enteredPin) return;
 
-try {
+        try {
             const vipDoc = await db.collection("admins").doc("vip_code").get();
             if (vipDoc.exists && vipDoc.data().pin === enteredPin) {
                 isVipMode = true;
                 codeBox.innerText = "✅ ราคาส่ง";
                 codeBox.style.color = "green";
                 
-                // 🔴 เช็คก่อนว่าเปิดหน้าสินค้าย่อยอยู่รึเปล่า ถ้าใช่อยู่ค่อยรีเฟรชสินค้าหน้ากระดาน
+                // 🔥 ลอจิกใหม่: สั่งบันทึกสิทธิ์ VIP ขึ้น Firebase ถาวร
+                let memberId = localStorage.getItem('memberIdStore1');
+                if (memberId) {
+                    await db.collection("users").doc(memberId).update({ 
+                        vipStatus: true 
+                    });
+                }
+                
+                // 🔴 เช็คก่อนว่าเปิดหน้าสินค้าย่อยอยู่รึเปล่า ถ้าใช่อยู่ค่อยรีเฟรชสินค้า
                 let subPage = document.getElementById('sub-category-page-store1');
                 if (subPage && subPage.style.display === 'block') {
                     if (typeof currentCategoryStore1 !== 'undefined' && currentCategoryStore1) {
                         openCategory(currentCategoryStore1);
                     }
                 }
-            } else {
-                // ลบ alert แจ้งเตือนรหัสผิดออกแล้ว เพื่อไม่ให้ระบบดึง Focus หน้าจอจนค้าง
-            }
+            } 
         } catch (error) {
             console.error("Error checking VIP code:", error);
-            // ลบ alert แจ้งเตือนระบบผิดพลาดออกแล้ว เพื่อไม่ให้ระบบดึง Focus หน้าจอจนค้าง
         }
     };
-}
-
+} // 🌟 กูใส่ปีกกาปิดฟังก์ชันตัวนี้ให้แล้ว วางทับของเดิมรอยแดงหายทันที!
 // ==========================================
 // (จบตรงนี้)📌 1. ระบบรหัสลับ (สร้างกล่องเอง + แก้บั๊กทับหน้าโปรไฟล์) (จบตรงนี้)
 // ==========================================
@@ -1433,3 +1437,33 @@ async function saveEditedProfile() {
 //==============================================================================
 // ==========================================
 // 1. ส่วนลงทะเบียนครั้งแรก (พร้อมเซฟลง Firebase) (จบตรงนี้)
+
+
+// ==========================================
+// 🔥 ระบบเช็ค VIP อัตโนมัติตอนลูกค้าเปิดเว็บ (ซ่อนอยู่หลังบ้าน)
+// ==========================================
+document.addEventListener("DOMContentLoaded", async () => {
+    let memberId = localStorage.getItem('memberIdStore1');
+    if (memberId) {
+        try {
+            let userDoc = await db.collection("users").doc(memberId).get();
+            // ถ้าลูกค้าคนนี้เคยใส่รหัสผ่านไปแล้ว (vipStatus เป็น true)
+            if (userDoc.exists && userDoc.data().vipStatus === true) {
+                isVipMode = true; // สวิตช์เป็นราคาส่งทันทีตั้งแต่เว็บโหลด
+                
+                // เปลี่ยนปุ่มหน้าโปรไฟล์ให้เป็นสีเขียว
+                let codeBox = document.getElementById('merchant-code-toggle');
+                if(codeBox) {
+                    codeBox.innerText = "✅ ราคาส่ง";
+                    codeBox.style.color = "green";
+                }
+            }
+        } catch (error) {
+            console.error("Error auto-checking VIP: ", error);
+        }
+    }
+});
+// ==========================================
+//(จบตรงนี้) 🔥 ระบบเช็ค VIP อัตโนมัติตอนลูกค้าเปิดเว็บ (ซ่อนอยู่หลังบ้าน) (จบตรงนี้)
+// ==========================================
+
