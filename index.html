@@ -2,23 +2,26 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<!--<script>
-window.onerror = function(message, source, lineno, colno, error) {
-    alert("เจอจุดพังแล้วตี๋!\nบรรทัดที่: " + lineno + "\nสาเหตุ: " + message);
-    return true;
-};
-</script>-->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Malee Online</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js');
+        }
+    </script>
 </head>
 <body>
 <div class="sticky-top-section">
     <img src="https://i.ibb.co/5hJLbbr5/pngtree-cartoon-child-girl-wearing-a-dragon-hat-costume-and-holding-zongzi-png-image-16743845-1.webp" class="cart-mascot"> 
 <div id="cart-summary-store1" onclick="openCartPage()">
-
+    
     
     <div id="cart-count-store1" style="font-size: 12px; font-weight: bold;">🛒 0 ชิ้น</div>
     <div id="cart-total-price-store1" style="font-size: 11px;">฿0</div>
@@ -290,5 +293,4 @@ window.onerror = function(message, source, lineno, colno, error) {
 
 </body>
 </html>
-
 
