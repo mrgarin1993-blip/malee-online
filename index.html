@@ -285,6 +285,96 @@
     </div>
 </div> 
 
+<div id="pwa-install-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(3px);">
+        <div style="background: white; border-radius: 15px; padding: 25px 20px; width: 100%; max-width: 350px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; animation: popIn 0.3s ease-out;">
+            <button onclick="closeInstallPopup()" style="position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 1.5em; color: #888; cursor: pointer; padding: 0; line-height: 1;">&times;</button>
+            
+            <img src="./icon-192.png" alt="MaLee Online" style="width: 75px; height: 75px; border-radius: 18px; margin-bottom: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            
+            <h3 style="margin: 0 0 10px 0; color: #16365d; font-family: 'Kanit', sans-serif;">ติดตั้ง MaLee Online</h3>
+            
+            <div id="pwa-popup-content" style="color: #555; font-size: 0.95em; margin-bottom: 20px; line-height: 1.6; font-family: 'Kanit', sans-serif;">
+                กำลังตรวจสอบระบบ...
+            </div>
+            
+            <button id="pwa-install-btn" style="display: none; width: 100%; padding: 12px; background: linear-gradient(180deg, #16365d 0%, #2e5a88 100%); color: white; border: none; border-radius: 8px; font-size: 1em; font-weight: bold; font-family: 'Kanit', sans-serif; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">ติดตั้งแอปพลิเคชัน</button>
+        </div>
+    </div>
+
+    <style>
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    </style>
+
+    <script>
+        let deferredPrompt;
+        const installPopup = document.getElementById('pwa-install-popup');
+        const popupContent = document.getElementById('pwa-popup-content');
+        const installBtn = document.getElementById('pwa-install-btn');
+
+        // ฟังก์ชันตรวจจับระบบ iOS
+        const isIOS = () => {
+            return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        };
+
+        // ฟังก์ชันตรวจสอบว่า iOS นั้นติดตั้งแอปแล้วหรือยัง
+        const isIosInstalled = () => {
+            return window.navigator.standalone === true;
+        };
+
+        // เมื่อลูกค้ากดยกเลิก ให้ซ่อนและจำไว้ใน Session
+        function closeInstallPopup() {
+            installPopup.style.display = 'none';
+            sessionStorage.setItem('hideInstallPopup', 'true');
+        }
+
+        // ==========================================
+        // ลอจิกสำหรับฝั่ง Android (และเบราว์เซอร์อื่นๆ ที่รองรับ)
+        // ==========================================
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // ป้องกันไม่ให้ระบบเด้งแถบติดตั้งเล็กๆ ข้างล่างเอง
+            e.preventDefault();
+            deferredPrompt = e;
+
+            // เช็คว่าลูกค้ายังไม่ได้เคยกดปิดป๊อปอัปนี้
+            if (!sessionStorage.getItem('hideInstallPopup')) {
+                popupContent.innerHTML = 'ติดตั้งแอปพลิเคชันของเราไว้ในมือถือ เพื่อประสบการณ์การช้อปปิ้งที่รวดเร็วและสะดวกยิ่งขึ้น!';
+                installBtn.style.display = 'block'; // โชว์ปุ่มให้กด
+                installPopup.style.display = 'flex'; // แสดงป๊อปอัป
+            }
+        });
+
+        // เมื่อลูกค้า Android กดปุ่ม "ติดตั้งแอปพลิเคชัน"
+        installBtn.addEventListener('click', async () => {
+            installPopup.style.display = 'none'; // ซ่อนป๊อปอัปเราก่อน
+            if (deferredPrompt) {
+                deferredPrompt.prompt(); // สั่งให้ระบบมือถือแสดงหน้ายืนยันการติดตั้ง
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('✅ ลูกค้ายอมรับการติดตั้ง');
+                    // ถ้าติดตั้งสำเร็จ ก็ไม่ต้องโชว์อีกแล้ว
+                    sessionStorage.setItem('hideInstallPopup', 'true'); 
+                }
+                deferredPrompt = null;
+            }
+        });
+
+        // ==========================================
+        // ลอจิกสำหรับฝั่ง iPhone/iPad (iOS)
+        // ==========================================
+        window.addEventListener('DOMContentLoaded', () => {
+            // ถ้าเป็น iOS และ ยังไม่ติดตั้งแอป และ ยังไม่ได้กดปิด
+            if (isIOS() && !isIosInstalled() && !sessionStorage.getItem('hideInstallPopup')) {
+                // iOS จะซ่อนปุ่มติดตั้งของเรา (เพราะกดไม่ได้) แต่จะโชว์วิธีทำแทน
+                popupContent.innerHTML = 'ติดตั้งแอปบน iPhone ของคุณง่ายๆ<br><br>1. กดปุ่ม <b>แชร์</b> <span style="font-size:1.2em;">(📤)</span> ด้านล่าง<br>2. เลื่อนเมนูและเลือก <b>"เพิ่มลงหน้าจอโฮม"</b><br><span style="font-size:1.2em;">(➕)</span>';
+                installBtn.style.display = 'none'; 
+                installPopup.style.display = 'flex'; // แสดงป๊อปอัป
+            }
+        });
+    </script>
+
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
