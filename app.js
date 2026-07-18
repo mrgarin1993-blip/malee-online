@@ -23,7 +23,7 @@ const db = firebase.firestore();
 let cartItemsStore1 = []; // เอาไว้เก็บรายการสินค้าที่ลูกค้ากดลงตะกร้า
 let totalAmountStore1 = 0; // เอาไว้เก็บยอดเงินรวม
 let currentCategoryStore1 = ""; // เอาไว้จำว่าตอนนี้ลูกค้าอยู่หน้าหมวดหมู่ไหน
- // localStorage.clear();
+  localStorage.clear();
  
  // ดักจับตอนโหลดหน้าเว็บเพื่อเช็คประวัติและดึงข้อมูลมาโชว์
 document.addEventListener("DOMContentLoaded", function() {
